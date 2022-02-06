@@ -10,10 +10,12 @@ export default function Settings() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [success, setSuccess] = useState(false)
-  const {user} = useContext(Context)
+  const {user, dispatch} = useContext(Context)
+  const PF = "http://localhost:5000/images/"
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    dispatch({type: "UPDATE_START"})
     const updatedUser = {
       userId: user._id,
       username, 
@@ -31,9 +33,12 @@ export default function Settings() {
       }catch(err){}
     }
     try {
-      await axios.put("/users/" + user._id, updatedUser)
+      const res = await axios.put("/users/" + user._id, updatedUser)
       setSuccess(true)
-    } catch(err){}
+      dispatch({type: "UPDATE_SUCCESS", payload: res.data})
+    } catch(err){
+      dispatch({type: "UPDATE_FAILURE"})
+    }
   }
 
   return (
@@ -47,7 +52,7 @@ export default function Settings() {
             <label>Profile Picture</label>
             <div className="settingsPP">
               <img 
-                src={file ? URL.createObjectURL(file) : user.profilePic} 
+                src={file ? URL.createObjectURL(file) : PF + user.profilePic} 
                 alt="" 
               />
               <label htmlFor="fileInput">
