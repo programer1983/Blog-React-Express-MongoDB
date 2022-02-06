@@ -16,6 +16,10 @@
     align-items: center;
 }
 
+.postCats {
+    margin-bottom: 20px;
+}
+
 .postCat {
     font-family: 'Varela Round', sans-serif;
     font-size: 15px;
